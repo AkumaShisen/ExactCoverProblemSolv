@@ -1,12 +1,12 @@
 public interface Node {
-    public Node getLeft();
-    public Node getRight();
-    public Node getUp();
-    public Node getDown();
-    public void setLeft(Node node);
-    public void setRight(Node node);
-    public void setUp(Node node);
-    public void setDown(Node node);
-    public Node get(int i);
-    public void set(Node node, int i);
+    Node getLeft();
+    Node getRight();
+    Node getUp();
+    Node getDown();
+    void setLeft(Node node);
+    void setRight(Node node);
+    void setUp(Node node);
+    void setDown(Node node);
+    Node get(int i);
+    void set(Node node, int i);
 }
