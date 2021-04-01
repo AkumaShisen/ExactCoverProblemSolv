@@ -9,4 +9,5 @@ public interface Node {
     void setDown(Node node);
     Node get(int i);
     void set(Node node, int i);
+    String getName();
 }

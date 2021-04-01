@@ -9,4 +9,6 @@ public class HeaderNode extends NodeBase{
         nodes = 0;
         this.name = name;
     }
+
+    public String getName() { return name; }
 }

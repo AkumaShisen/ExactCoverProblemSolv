@@ -13,4 +13,5 @@ public class NodeBase implements Node {
     public NodeBase() {
         neighbours = new Node[4];
     }
+    public String getName() { return "1"; }
 }

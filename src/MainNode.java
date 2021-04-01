@@ -62,5 +62,41 @@ public class MainNode extends NodeBase{
         new SparseNode(rowHeader, colHeader);
         return true;
     }
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("columns: ");
+        Node iter = this;
+        while(! (iter.getRight() instanceof MainNode)) {
+            iter = iter.getRight();
+            result.append(iter.getName()).append(" | ");
+        }
+        result.append("\nrows: ");
+        iter = iter.getRight();
+
+        while(! (iter.getDown() instanceof MainNode)) {
+            iter = iter.getDown();
+            result.append(iter.getName()).append(" | ");
+        }
+        result.append("\n");
+        Node rowIt = this.get(1);
+        Node colIt = this.get(0);
+        while(!(rowIt instanceof MainNode)) {
+            Node colOfSparseNode = rowIt.get(0) instanceof SparseNode ? ((SparseNode) rowIt.get(0) ).getCol() : this;
+            while(!(colIt instanceof MainNode)) {
+                if(colIt.equals(colOfSparseNode)) {
+                    result.append("1 ");
+                    colOfSparseNode = rowIt.get(0) instanceof SparseNode ? ((SparseNode) rowIt.get(0) ).getCol() : this;
+                } else result.append("0 ");
+
+                colIt = colIt.get(0);
+            }
+            result.append("\n");
+            rowIt = rowIt.get(1);
+        }
+
+
+        return result.toString();
+    }
 
 }
