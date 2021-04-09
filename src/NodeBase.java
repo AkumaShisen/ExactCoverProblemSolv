@@ -14,4 +14,18 @@ public class NodeBase implements Node {
         neighbours = new Node[4];
     }
     public String getName() { return "1"; }
+
+    public void detachNode(int d) {
+        /*
+        row : node.up.down = node.down   ;     node.down.up = node.up
+        col : node.left.right = node.right   ;  node.right.left = node.left
+         */
+        this.get(d+2).set(this.get(d), d);
+        this.get(d).set(this.get(d+2), d+2);
+    }
+
+    public void attachNode(int d) {
+        this.get(d+2).set(this, d);
+        this.get(d).set(this, d+2);
+    }
 }

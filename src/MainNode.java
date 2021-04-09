@@ -2,16 +2,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 public class MainNode extends NodeBase{
     int col;
     int row;
     List<Map<String,Node>> headerNodeMapList;
+    Stack<HeaderManager> managers;
 
 
     //the MainNode represents the leftupper corner of the 2D matrix
     public MainNode() {
         super();
+        managers = new Stack<>();
         for(int i=0;i<4;i++) neighbours[i] = this;
         headerNodeMapList = new ArrayList<>();
         headerNodeMapList.add(new HashMap<>()); //colheaders, index 0
@@ -41,7 +44,7 @@ public class MainNode extends NodeBase{
         int i = node.rowHeader;
         node.set(this.get(i+2), i+2);
         node.set(this, i);
-        node.get(i+2).set(node, i);
+        this.get(i+2).set(node, i);
         this.set(node,i+2);
     }
 
@@ -81,19 +84,24 @@ public class MainNode extends NodeBase{
         result.append("\n");
         Node rowIt = this.get(1);
         Node colIt = this.get(0);
+
         while(!(rowIt instanceof MainNode)) {
-            Node colOfSparseNode = rowIt.get(0) instanceof SparseNode ? ((SparseNode) rowIt.get(0) ).getCol() : this;
+
+            SparseNode nextSparseNode = rowIt.get(0) instanceof SparseNode ? (SparseNode) rowIt.get(0)  : null;
             while(!(colIt instanceof MainNode)) {
-                if(colIt.equals(colOfSparseNode)) {
+
+                if(nextSparseNode != null && colIt.equals(nextSparseNode.getCol())) {
                     result.append("1 ");
-                    colOfSparseNode = rowIt.get(0) instanceof SparseNode ? ((SparseNode) rowIt.get(0) ).getCol() : this;
+                    nextSparseNode = nextSparseNode.get(0) instanceof SparseNode ? (SparseNode) nextSparseNode.get(0) : null;
                 } else result.append("0 ");
 
                 colIt = colIt.get(0);
             }
             result.append("\n");
+            colIt = colIt.get(0);
             rowIt = rowIt.get(1);
         }
+
 
 
         return result.toString();

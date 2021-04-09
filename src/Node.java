@@ -10,4 +10,6 @@ public interface Node {
     Node get(int i);
     void set(Node node, int i);
     String getName();
+    void detachNode(int d); //d is either 0 or 1, if 0 its detach left/right , if 1 its detach up/down
+    void attachNode(int d);
 }
