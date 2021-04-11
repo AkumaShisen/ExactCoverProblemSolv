@@ -1,4 +1,8 @@
-public class SparseNode extends NodeBase   {
+package DancingLinkAlg;
+
+
+
+public class SparseNode extends NodeBase {
     HeaderNode[] headers;
     /*creates a sparse node, representing a 1 in a sparse matrix, with a given row and column.
     * The arguments are the headernodes, the headers for  the column and for the row of the given node.
@@ -9,6 +13,8 @@ public class SparseNode extends NodeBase   {
         headers = new HeaderNode[2];
         headers[0] = rowHeader;
         headers[1] = colHeader;
+        rowHeader.nodes++;
+        colHeader.nodes++;
 
         for(int i=0; i<2;i++) {
             neighbours[i] = headers[i];
@@ -19,4 +25,17 @@ public class SparseNode extends NodeBase   {
     }
     public HeaderNode getRow() { return headers[0];}
     public HeaderNode getCol() { return headers[1];}
+    public void detachNode(int d) {
+        super.detachNode(d);
+        headers[d].nodes--;
+    }
+    public void attachNode(int d) {
+        super.attachNode(d);
+        headers[d].nodes++;
+    }
+
+    @Override
+    public String getIdentity() {
+        return "SparseNode "+getRow().getName()+" / "+getCol().getName();
+    }
 }

@@ -1,6 +1,14 @@
+package DancingLinkAlg;
+
+
+
 import java.util.Stack;
 public class HeaderManager {
     Stack<HeaderNode> stack = new Stack<>();
+    MainNode root;
+    public HeaderManager(MainNode root) {
+        this.root = root;
+    }
 
     public void detachCascade(HeaderNode node, int casc) {
         stack.push(node);
@@ -16,8 +24,9 @@ public class HeaderManager {
     }
 
     public void detach(HeaderNode node) {
-        stack.push(node);
+        this.stack.push(node);
         node.detachNode(node.rowHeader);
+
 
         Node it = node;
         int d = 1 - node.rowHeader;
@@ -29,6 +38,7 @@ public class HeaderManager {
     public void attach(HeaderNode node) {
         node.attachNode(node.rowHeader);
 
+
         Node it = node;
         int d = 1 - node.rowHeader;
         while(it.get(d) instanceof SparseNode) {
@@ -38,6 +48,6 @@ public class HeaderManager {
     }
 
     public void attachAll() {
-        while(!stack.empty()) attach(stack.pop());
+        while(!this.stack.empty()) attach(this.stack.pop());
     }
 }

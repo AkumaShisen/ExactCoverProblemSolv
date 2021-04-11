@@ -1,3 +1,5 @@
+package DancingLinkAlg;
+
 public interface Node {
     Node getLeft();
     Node getRight();
@@ -12,4 +14,6 @@ public interface Node {
     String getName();
     void detachNode(int d); //d is either 0 or 1, if 0 its detach left/right , if 1 its detach up/down
     void attachNode(int d);
+    String getIdentity();
+    String getNeightbourInfo();
 }

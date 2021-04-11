@@ -1,17 +1,19 @@
+package DancingLinkAlg;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-public class MainNode extends NodeBase{
-    int col;
-    int row;
-    List<Map<String,Node>> headerNodeMapList;
+public class MainNode extends NodeBase {
+    public int col;
+    public int row;
+    public List<Map<String, Node>> headerNodeMapList;
     Stack<HeaderManager> managers;
 
 
-    //the MainNode represents the leftupper corner of the 2D matrix
+    //the DancingLinkAlg.MainNode represents the leftupper corner of the 2D matrix
     public MainNode() {
         super();
         managers = new Stack<>();
@@ -24,10 +26,11 @@ public class MainNode extends NodeBase{
     }
 
     public void addHeader(HeaderNode node) {
-        //depending if HeaderNode should be a rowheader or col header, add to the correct count
+        //depending if DancingLinkAlg.HeaderNode should be a rowheader or col header, add to the correct count
         row += node.rowHeader;
         col += 1 - node.rowHeader;
         headerNodeMapList.get(node.rowHeader).put(node.name, node);
+        node.root = this;
         /*
         if col header: 0
         node.left = main.left
@@ -105,6 +108,19 @@ public class MainNode extends NodeBase{
 
 
         return result.toString();
+    }
+    /*public MainNode clone() {
+        MainNode root = new MainNode();
+        Node it = root.get(0); // get rightNode, should be ColHeaders
+        while(it instanceof HeaderNode) {
+
+        }
+        return root;
+    }*/
+
+    @Override
+    public String getIdentity() {
+        return "MainNode | "+this.row+"/"+this.col;
     }
 
 }

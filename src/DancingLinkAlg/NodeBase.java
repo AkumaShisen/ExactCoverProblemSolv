@@ -1,3 +1,6 @@
+package DancingLinkAlg;
+
+
 public class NodeBase implements Node {
     Node[] neighbours;
     public Node getLeft() { return neighbours[2]; }
@@ -27,5 +30,15 @@ public class NodeBase implements Node {
     public void attachNode(int d) {
         this.get(d+2).set(this, d);
         this.get(d).set(this, d+2);
+    }
+    public String getIdentity() {
+        return "DancingLinkAlg.NodeBase";
+    }
+    public String getNeightbourInfo(){
+        return "left: "+getLeft().getIdentity()+"\n"+
+                        "up: "+getUp().getIdentity()+"\n"+
+                        "right "+getRight().getIdentity()+"\n"+
+                        "down: "+getDown().getIdentity();
+
     }
 }
