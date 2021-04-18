@@ -5,7 +5,6 @@ public class HeaderNode extends NodeBase {
     public int nodes;
     String name;
     public int rowHeader;
-
     HeaderNode(String name, int isRowHeader) {
         super();
         for(int i=0;i<4;i++) neighbours[i] = this;
@@ -28,5 +27,10 @@ public class HeaderNode extends NodeBase {
     @Override
     public String getIdentity() {
         return (this.rowHeader == 0 ? "RowHeader " : "ColHeader ")+this.name+" nodes : "+this.nodes;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

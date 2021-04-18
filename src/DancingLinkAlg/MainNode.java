@@ -10,6 +10,12 @@ import java.util.Stack;
 public class MainNode extends NodeBase {
     public int col;
     public int row;
+    /* model here is that optional columns are added on the right from the lastoptcol, while mainColumns are
+    *  added at the left from the mainnode, so starting from the right of optcolheader and ending at the left of the
+    *  mainnode will only be maincolumns, while optional columns will be starting from the right of mainnode and until
+    *  the optcolheader pointer
+    */
+    public Node lastOptCol;
 
     // typically contains 2 entries, the first being a list that contains all colheaders, the second all rowheaders
     public List<Map<String, Node>> headerNodeMapList;
@@ -23,6 +29,7 @@ public class MainNode extends NodeBase {
         headerNodeMapList.add(new HashMap<>()); //rowheaders, index 1
         col = 0;
         row = 0;
+        lastOptCol = this;
     }
 
     public void addHeader(HeaderNode node) {
@@ -54,6 +61,15 @@ public class MainNode extends NodeBase {
     public void addColumnHeader(String name) {
         HeaderNode header = new HeaderNode(name, 0);
         this.addHeader(header);
+    }
+
+    public void addOptColHeader(String name) {
+        HeaderNode header = new HeaderNode(name,0);
+        this.lastOptCol.getRight().setLeft(header);
+        header.setRight(this.lastOptCol.getRight());
+        header.setLeft(this.lastOptCol);
+        this.lastOptCol.setRight(header);
+        this.lastOptCol = header;
     }
 
     public void addRowHeader(String name) {

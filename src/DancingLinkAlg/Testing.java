@@ -1,10 +1,16 @@
 package DancingLinkAlg;
 
 
+import java.util.List;
 
 public class Testing {
     public static void main(String[] args) {
-
+        MainNode test = getMatrixExample();
+        System.out.println(test);
+        DancingLink alg = new DancingLink(test,0);
+        Tree<HeaderNode> root = alg.solve();
+        TreeIterator<HeaderNode> it = new TreeIterator<>(root);
+        System.out.println(root.toString());
 
     }
 

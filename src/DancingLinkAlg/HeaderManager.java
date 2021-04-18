@@ -44,6 +44,17 @@ public class HeaderManager {
             it = it.get(d);
         }
     }
+    /*
+     * given a certain headerrow (row/ col) iterate trough all entries in that row/col and detachCascade
+     * the col/row of each sparsenode in that row/col
+     */
+    public void detachEntryHeaders(HeaderNode node) {
+        Node iter = node.get(1-node.rowHeader);
+        while(iter instanceof SparseNode) {
+            detachCascade(((SparseNode) iter).headers[node.rowHeader]);
+            iter = iter.get(1-node.rowHeader);
+        }
+    }
 
     // detach the entire row/col (depending on the headernode rowheader value) , calling first detach on HeaderNode
     // then on each sparsenode in that row/col
