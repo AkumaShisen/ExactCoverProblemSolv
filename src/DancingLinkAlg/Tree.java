@@ -23,15 +23,16 @@ public class Tree<T> {
     public boolean isLeaf() {
         return childList.isEmpty();
     }
+
     public String toString() {
         StringBuilder result= new StringBuilder();
         TreeIterator<T> it = this.iterator();
         while(it.hasNext()) {
-            LinkedList<Tree<T>> nextPath = it.next();
-            while(!nextPath.isEmpty()) {
-                Tree<T> nextVal = nextPath.removeLast();
+            Iterator<Tree<T>> nextPath = it.nextIt();
+            while(nextPath.hasNext()) {
+                Tree<T> nextVal = nextPath.next();
                 if(nextVal.val != null) result.append(nextVal.val.toString());
-                if(!nextPath.isEmpty()) result.append(" | ");
+                if(nextPath.hasNext()) result.append(" | ");
             }
 
             result.append("\n");
@@ -59,12 +60,18 @@ class TreeIterator<T> {
 
     boolean hasNext() {
         try {
-            mutate();
-            returned = false;
+            if(returned) {
+                mutate();
+                returned = false;
+            }
             return true;
         } catch (NoSuchElementException e) {return false;}
     }
-
+    Iterator<Tree<T>> nextIt() {
+        if(returned) mutate();
+        else returned = true;
+        return stack.iterator();
+    }
     LinkedList<Tree<T>> next() {
         if(returned) mutate();
         else returned = true;
@@ -72,18 +79,19 @@ class TreeIterator<T> {
     }
 
     void mutate() throws NoSuchElementException {
-        if(!stack.isEmpty()) stack.pop();
+
+        if(!stack.isEmpty()) stack.removeLast();
         while (!itStack.isEmpty()) {
 
             Iterator<Tree<T>> it = itStack.peek();
 
             if (it.hasNext()) {
-                stack.push(it.next());
+                stack.add(it.next());
 
-                if (stack.peek().isLeaf()) return;
-                else itStack.push(stack.peek().childList.iterator());
+                if (stack.getLast().isLeaf()) return;
+                else itStack.push(stack.getLast().childList.iterator());
             } else {
-                stack.pop();
+                stack.removeLast();
                 itStack.pop();
             }
         }
