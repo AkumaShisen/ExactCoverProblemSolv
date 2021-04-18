@@ -1,10 +1,11 @@
 package DancingLinkAlg;
 
 public class HeaderNode extends NodeBase {
-    MainNode root;
+    public MainNode root;
     public int nodes;
     String name;
     public int rowHeader;
+
     HeaderNode(String name, int isRowHeader) {
         super();
         for(int i=0;i<4;i++) neighbours[i] = this;

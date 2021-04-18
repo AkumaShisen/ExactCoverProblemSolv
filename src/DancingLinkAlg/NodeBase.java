@@ -1,6 +1,7 @@
 package DancingLinkAlg;
 
-
+/* creates the basic structure of a node that gets extended by mainnode, headernode and sparsenode
+*  sets up an array with 4 spaces for the 4 neightbours aswell as the get and set for it*/
 public class NodeBase implements Node {
     Node[] neighbours;
     public Node getLeft() { return neighbours[2]; }

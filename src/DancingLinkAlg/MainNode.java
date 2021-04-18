@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+/* the root of matrix, the upperleft corner of the 2D matrix */
 public class MainNode extends NodeBase {
     public int col;
     public int row;
+
+    // typically contains 2 entries, the first being a list that contains all colheaders, the second all rowheaders
     public List<Map<String, Node>> headerNodeMapList;
-    Stack<HeaderManager> managers;
 
 
-    //the DancingLinkAlg.MainNode represents the leftupper corner of the 2D matrix
     public MainNode() {
         super();
-        managers = new Stack<>();
         for(int i=0;i<4;i++) neighbours[i] = this;
         headerNodeMapList = new ArrayList<>();
         headerNodeMapList.add(new HashMap<>()); //colheaders, index 0
@@ -109,14 +109,29 @@ public class MainNode extends NodeBase {
 
         return result.toString();
     }
-    /*public MainNode clone() {
+    // returns a new  instance of MainNode that is connected to a new sparsematrix that
+    // represents the same matrix as the instance it is called from
+    public MainNode copy() {
         MainNode root = new MainNode();
-        Node it = root.get(0); // get rightNode, should be ColHeaders
+        Node it = this.getRight(); // get rightNode, should be ColHeaders
         while(it instanceof HeaderNode) {
+            root.addColumnHeader(((HeaderNode)it).name);
+            it = it.getRight();
+        }
+        it = this.getDown(); // it trough rowHeaders
+        while(it instanceof HeaderNode) {
+            String rowName = ((HeaderNode) it).name;
+            root.addRowHeader(((HeaderNode)it).name);
+            Node sparseIt = it.getRight();
 
+            while(sparseIt instanceof SparseNode) { // it trough sparsenodes in row
+                root.addSparseNode(rowName, ((SparseNode)sparseIt).getCol().name);
+                sparseIt = sparseIt.getRight();
+            }
+            it = it.getDown();
         }
         return root;
-    }*/
+    }
 
     @Override
     public String getIdentity() {
