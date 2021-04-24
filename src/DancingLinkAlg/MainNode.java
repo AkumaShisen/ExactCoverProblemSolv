@@ -32,11 +32,15 @@ public class MainNode extends NodeBase {
         lastOptCol = this;
     }
 
-    public void addHeader(HeaderNode node) {
+    public void addHeader(HeaderNode node) throws UnsupportedOperationException {
         //depending if DancingLinkAlg.HeaderNode should be a rowheader or col header, add to the correct count
+        if(headerNodeMapList.get(node.rowHeader).containsKey(node.identity.getName())) {
+            throw new UnsupportedOperationException("already contains a "+
+                    (node.rowHeader == 1 ? "row":"col") + " with this identity name in the matrix");
+        }
         row += node.rowHeader;
         col += 1 - node.rowHeader;
-        headerNodeMapList.get(node.rowHeader).put(node.name, node);
+        headerNodeMapList.get(node.rowHeader).put(node.identity.getName(), node);
         node.root = this;
         /*
         if col header: 0
@@ -58,12 +62,12 @@ public class MainNode extends NodeBase {
         this.set(node,i+2);
     }
 
-    public void addColumnHeader(String name) {
+    public void addColumnHeader(Identity name) {
         HeaderNode header = new HeaderNode(name, 0);
         this.addHeader(header);
     }
 
-    public void addOptColHeader(String name) {
+    public void addOptColHeader(Identity name) {
         HeaderNode header = new HeaderNode(name,0);
         this.lastOptCol.getRight().setLeft(header);
         header.setRight(this.lastOptCol.getRight());
@@ -72,7 +76,7 @@ public class MainNode extends NodeBase {
         this.lastOptCol = header;
     }
 
-    public void addRowHeader(String name) {
+    public void addRowHeader(Identity name) {
         HeaderNode header = new HeaderNode(name, 1);
         this.addHeader(header);
     }
@@ -131,17 +135,17 @@ public class MainNode extends NodeBase {
         MainNode root = new MainNode();
         Node it = this.getRight(); // get rightNode, should be ColHeaders
         while(it instanceof HeaderNode) {
-            root.addColumnHeader(((HeaderNode)it).name);
+            root.addColumnHeader(((HeaderNode)it).identity);
             it = it.getRight();
         }
         it = this.getDown(); // it trough rowHeaders
         while(it instanceof HeaderNode) {
-            String rowName = ((HeaderNode) it).name;
-            root.addRowHeader(((HeaderNode)it).name);
+            String rowName = ((HeaderNode) it).identity.getName();
+            root.addRowHeader(((HeaderNode)it).identity);
             Node sparseIt = it.getRight();
 
             while(sparseIt instanceof SparseNode) { // it trough sparsenodes in row
-                root.addSparseNode(rowName, ((SparseNode)sparseIt).getCol().name);
+                root.addSparseNode(rowName, ((SparseNode)sparseIt).getCol().identity.getName());
                 sparseIt = sparseIt.getRight();
             }
             it = it.getDown();
