@@ -1,8 +1,9 @@
-package DancingLinkAlg;
+package HeaderSpecifiers;
+
 
 import java.util.*;
 
-public class KoorPosList implements PositionInGrid{
+public class KoorPosList implements PositionInGrid {
     List<PositionInGrid> koorPosList;
 
     public KoorPosList(List<PositionInGrid> list) {

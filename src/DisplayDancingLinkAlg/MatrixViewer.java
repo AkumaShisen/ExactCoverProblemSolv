@@ -6,7 +6,8 @@ import javax.swing.*;
 public class MatrixViewer {
     public static void main(String[] args) {
         JFrame myFrame = new JFrame();
-        MainNode root = Testing.getMatrixExample();
+        //MainNode root = Testing.getMatrixExampleWithIdentityCheck();
+        MainNode root = Testing.getMatrixWithListAreaIdentity();
         HeaderManager manager = new HeaderManager();
         System.out.println(root.toString());
 

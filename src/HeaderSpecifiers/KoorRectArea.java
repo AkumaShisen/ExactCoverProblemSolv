@@ -1,8 +1,8 @@
-package DancingLinkAlg;
+package HeaderSpecifiers;
 
 import java.util.*;
 
-public class KoorRectArea implements PositionInGrid{
+public class KoorRectArea implements PositionInGrid {
 
     Map<Character, List<Integer>> koorPosition;
     Set<Character> dimensions;
@@ -14,10 +14,10 @@ public class KoorRectArea implements PositionInGrid{
         this.dimensions = new HashSet<>();
         for(int i=0; i<dimensions.length;i++) {
             List<Integer> range = new ArrayList<>();
-            range.add(Integer.valueOf(min[i]));
-            range.add(Integer.valueOf(max[i]));
-            this.koorPosition.put(Character.valueOf(dimensions[i]), range);
-            this.dimensions.add(Character.valueOf(dimensions[i]));
+            range.add(min[i]);
+            range.add(max[i]);
+            this.koorPosition.put(dimensions[i], range);
+            this.dimensions.add(dimensions[i]);
         }
     }
     public boolean hasDimension(Character dimension) {
@@ -27,7 +27,7 @@ public class KoorRectArea implements PositionInGrid{
     @Override
     public boolean isInside(KoorPosition toCheck) {
         for(Character key : this.dimensions) {
-            if(!toCheck.hasDimension(key)) return false;
+            if(toCheck.hasDimension(key)) return false;
             if( this.koorPosition.get(key).get(0).compareTo(toCheck.koorPosition.get(key)) >=0
                 ||this.koorPosition.get(key).get(1).compareTo(toCheck.koorPosition.get(key)) <=0) return false;
         }

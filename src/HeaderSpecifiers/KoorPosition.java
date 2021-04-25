@@ -1,11 +1,11 @@
-package DancingLinkAlg;
+package HeaderSpecifiers;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class KoorPosition implements PositionInGrid{
+public class KoorPosition implements PositionInGrid {
     Map<Character, Integer> koorPosition;
     Set<Character> dimensions;
 
@@ -14,8 +14,8 @@ public class KoorPosition implements PositionInGrid{
         this.koorPosition = new HashMap<>();
         this.dimensions = new HashSet<>();
         for(int i=0; i<dimensions.length;i++) {
-            this.koorPosition.put(Character.valueOf(dimensions[i]), Integer.valueOf(val[i]));
-            this.dimensions.add(Character.valueOf(dimensions[i]));
+            this.koorPosition.put(dimensions[i], val[i]);
+            this.dimensions.add(dimensions[i]);
         }
     }
     public boolean hasDimension(Character dimension) {
@@ -29,5 +29,12 @@ public class KoorPosition implements PositionInGrid{
             if(! this.koorPosition.get(key).equals(toCheck.koorPosition.get(key))) return false;
         }
         return true;
+    }
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for(Character c : koorPosition.keySet()) {
+            result.append(c).append(":").append(koorPosition.get(c)).append("|");
+        }
+        return result.toString();
     }
 }

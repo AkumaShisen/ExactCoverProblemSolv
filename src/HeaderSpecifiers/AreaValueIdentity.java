@@ -1,13 +1,16 @@
-package DancingLinkAlg;
+package HeaderSpecifiers;
+
+import DancingLinkAlg.HeaderIdentity;
+import DancingLinkAlg.Identity;
 
 import java.util.Map;
 
-public class AreaValueIdentity extends HeaderIdentity{
+public class AreaValueIdentity extends HeaderIdentity {
     // this class rn equal to "check pos, equal match val", could be generalized to having variable matching
     // method of match, equal, not equal, bigger, smaller match, need static list for ranking, if that variable
     // is null, use default ranking (use integer value of characters)
 
-    enum Comparator {
+    public enum Comparator {
         EQUAL,
         NOTEQUAL,
         BIGGEREQUAL,
@@ -15,6 +18,8 @@ public class AreaValueIdentity extends HeaderIdentity{
         SMALLEREQUAL,
         SMALLER
     }
+    //assigns each character in the map an integer, if the key isnt in the map or the map is null,
+    //use the ascii table. With the help of that integer will characters be compared
     private static Map<Character,Integer> characterRanking;
     Comparator comparator;
     PositionInGrid pos;
@@ -22,11 +27,21 @@ public class AreaValueIdentity extends HeaderIdentity{
 
 
     public AreaValueIdentity(PositionInGrid pos, char[] val, Comparator comparator) {
-        super(pos.toString() +" | "+(val==null ? "*": val.toString()));
+        super(pos.toString() +" | "+comparator+" | ");
+        StringBuilder name = new StringBuilder(pos.toString() +" | "+comparator+" | ");
+        if(val==null) name.append("*");
+        else for (char c : val) name.append(c);
+        this.name = name.toString();
 
         this.pos = pos;
         this.val = val;
         this.comparator = comparator;
+    }
+
+    @Override
+    public boolean match(Identity toCheck) {
+        if(toCheck instanceof PosValueIdentity) return match((PosValueIdentity) toCheck);
+        return false;
     }
 
     //first checks if point from toCheck is inside area from this, then checks if toCheck.val is inside this.val
@@ -62,7 +77,7 @@ public class AreaValueIdentity extends HeaderIdentity{
         AreaValueIdentity.characterRanking = characterRanking;
     }
     public static int getAssociatedInt(char c) {
-        if(characterRanking == null || !characterRanking.containsKey(c)) return (int) c;
+        if(characterRanking == null || !characterRanking.containsKey(c)) return c;
         else return characterRanking.get(c);
     }
 }

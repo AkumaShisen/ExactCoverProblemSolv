@@ -77,8 +77,16 @@ public class MainNode extends NodeBase {
     }
 
     public void addRowHeader(Identity name) {
-        HeaderNode header = new HeaderNode(name, 1);
-        this.addHeader(header);
+        HeaderNode rowHeader = new HeaderNode(name, 1);
+        this.addHeader(rowHeader);
+        Node it = this.getRight();
+        while(it instanceof HeaderNode) {
+            HeaderNode colHeader = (HeaderNode) it;
+            if(colHeader.identity.match(name)) {
+                new SparseNode(rowHeader,colHeader );
+            }
+            it=it.getRight();
+        }
     }
 
     public boolean addSparseNode(String rowName, String colName) {

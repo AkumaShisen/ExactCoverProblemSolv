@@ -2,6 +2,7 @@ package DancingLinkAlg;
 
 import java.util.List;
 import java.util.Stack;
+import HeaderSpecifiers.*;
 
 public class DancingLink {
     MainNode root;
@@ -9,7 +10,19 @@ public class DancingLink {
     Tree<HeaderNode> solutionTree;
     int solutionCount;
     int maxSolutions;
-
+    public DancingLink(List<Constrains> constrains, List<Options> options, int stopAtSolutions) {
+        this.root = new MainNode();
+        this.managers = new Stack<>();
+        this.solutionTree = new Tree<>(null);
+        this.solutionCount = 0;
+        this.maxSolutions = stopAtSolutions;
+        for(Constrains constrain : constrains) {
+            constrain.addConstrainsToMatrix(this.root);
+        }
+        for(Options option : options) {
+            option.addOptionsToMatrix(this.root);
+        }
+    }
     public DancingLink(MainNode root, int stopAtSolutions) {
         this.root = root;
         this.managers = new Stack<>();
