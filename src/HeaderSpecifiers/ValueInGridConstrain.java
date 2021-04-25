@@ -33,7 +33,7 @@ public class ValueInGridConstrain implements Constrains{
         int[] currentMax = new int[dimensions.length];
         for(int i=0;i<dimensions.length;i++) {
             current[i] = min[i];
-            currentMax[i] = min[i] + gridDim[i];
+            currentMax[i] = min[i] + gridDim[i]-1;
         }
 
         getAllCellsInRange:
@@ -46,7 +46,7 @@ public class ValueInGridConstrain implements Constrains{
             do {
                 if(current[i]>max[i]) {
                     current[i] = min[i];
-                    currentMax[i] = min[i] + gridDim[i];
+                    currentMax[i] = min[i] + gridDim[i]-1;
                     i++;
                 }
                 if(i==dimensions.length) break getAllCellsInRange;
