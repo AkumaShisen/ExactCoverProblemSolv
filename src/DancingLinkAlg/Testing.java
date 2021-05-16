@@ -1,11 +1,9 @@
 package DancingLinkAlg;
 
-import HeaderSpecifiers.AreaValueIdentity;
-import HeaderSpecifiers.KoorPosition;
-import HeaderSpecifiers.ListAreaIdentity;
-import HeaderSpecifiers.PosValueIdentity;
+import HeaderSpecifiers.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Testing {
@@ -17,10 +15,70 @@ public class Testing {
         TreeIterator<HeaderNode> it = new TreeIterator<>(root);
         System.out.println(alg.solutionCount);
         System.out.println(root.toString());*/
-        MainNode test = getMatrixWithListAreaIdentity();
-        System.out.println(test);
+        DancingLink alg = ConstraintsOptionsTest(9,9,3,3,9);
+        //System.out.println(alg.root);
+        char[] dim = {'R','C'};
 
 
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,0,2), "9"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,0,4), "8"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,0,7), "8"));
+
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,1,0), "2"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,1,1), "5"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,1,6), "9"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,1,7), "8"));
+
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,2,3), "4"));
+
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,3,1), "2"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,3,3), "6"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,3,8), "8"));
+
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,4,0), "6"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,4,3), "3"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,4,5), "5"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,4,8), "7"));
+
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,5,0), "9"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,5,5), "4"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,5,7), "3"));
+
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,6,5), "2"));
+
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,7,1), "1"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,7,2), "8"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,7,7), "2"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,7,8), "6"));
+
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,8,1), "3"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,8,4), "6"));
+        alg.selectIdentity(new PosValueIdentity(new KoorPosition(dim,8,6), "4"));
+
+        alg.solve();
+        System.out.println(alg.solutionTree);
+        System.out.println(alg.solutionCount);
+
+
+    }
+
+    public static DancingLink ConstraintsOptionsTest(int rows,int columns,int rowBox, int colBox,int valueAmount) {
+        rows--;
+        columns--;
+        String[] val = new String[valueAmount];
+        for(int i=0;i<valueAmount;i++) val[i] = String.valueOf((char) ((i>8 ? i+7 : i) +'1'));
+
+        List<Constrains> constrains = new LinkedList<>();
+        constrains.add(new ValueInRangeConstrainOption('R','C',0,0,rows,columns,null));
+        constrains.add(new ValueInRangeConstrainOption('R',0,rows,val));
+        constrains.add(new ValueInRangeConstrainOption('C',0,columns,val));
+        constrains.add(new ValueInGridConstrain('R','C',0,0,rows,columns, rowBox,colBox,val));
+
+        List<Options> options = new LinkedList<>();
+        options.add(new ValueInRangeConstrainOption('R','C',0,0,rows,columns,val));
+
+
+        return new DancingLink(constrains,options,0);
     }
 
 
@@ -82,7 +140,7 @@ public class Testing {
         int[] val3 = {2};
         KoorPosition pos3 = new KoorPosition(dimension1,val3);
 
-        char[] colVal= {'2'};
+        String[] colVal= {"2"};
         AreaValueIdentity equal = new AreaValueIdentity(pos1, colVal, AreaValueIdentity.Comparator.EQUAL);
         AreaValueIdentity bigger = new AreaValueIdentity(pos2, colVal, AreaValueIdentity.Comparator.BIGGER);
         List<AreaValueIdentity> areaIdentityList = new ArrayList<>();
@@ -97,7 +155,7 @@ public class Testing {
         KoorPosition[] positions = {pos1,pos2};
         for(KoorPosition e : positions) {
             for(int i=0; i<4;i++) {
-                PosValueIdentity rowId = new PosValueIdentity(e, (char) (i + '0'));
+                PosValueIdentity rowId = new PosValueIdentity(e,String.valueOf( (char) (i + '0')));
                 System.out.println(rowId.name);
                 root.addRowHeader(rowId);
             }

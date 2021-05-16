@@ -18,23 +18,21 @@ public class AreaValueIdentity extends HeaderIdentity {
         SMALLEREQUAL,
         SMALLER
     }
-    //assigns each character in the map an integer, if the key isnt in the map or the map is null,
-    //use the ascii table. With the help of that integer will characters be compared
-    private static Map<Character,Integer> characterRanking;
+
     Comparator comparator;
     PositionInGrid pos;
-    char[] val;
+    String[] val;
 
 
-    public AreaValueIdentity(PositionInGrid pos, char[] val, Comparator comparator) {
-        super(pos.toString() +" | "+comparator+" | ");
+    public AreaValueIdentity(PositionInGrid pos, String[] val, Comparator comparator) {
+        super("");
         StringBuilder name = new StringBuilder(pos.toString() +" | "+comparator+" | ");
         if(val==null) name.append("*");
-        else for (char c : val) name.append(c);
+        else for (String c : val) name.append(c).append("|");
         this.name = name.toString();
 
         this.pos = pos;
-        this.val = val;
+        this.val = val == null? null : val.clone();
         this.comparator = comparator;
     }
 
@@ -49,35 +47,27 @@ public class AreaValueIdentity extends HeaderIdentity {
         if (!this.pos.isInside(toCheck.pos)) return false;
         if (this.val == null) return true;
 
-        switch(this.comparator) {
+        switch (this.comparator) {
             case EQUAL:
-                for (char e : this.val) {
-                    if (e == toCheck.val) return true;
+                for (String e : this.val) {
+                    if (e.equals(toCheck.val)) return true;
                 }
                 return false;
             case NOTEQUAL:
-                for (char e : this.val) {
-                    if (e == toCheck.val) return false;
+                for (String e : this.val) {
+                    if (e.equals(toCheck.val)) return false;
                 }
                 return true;
             case BIGGER:
-                return getAssociatedInt(toCheck.val)>getAssociatedInt(this.val[0]);
+                return getAssociatedInt(toCheck.val) > getAssociatedInt(this.val[0]);
             case SMALLER:
-                return getAssociatedInt(toCheck.val)<getAssociatedInt(this.val[0]);
+                return getAssociatedInt(toCheck.val) < getAssociatedInt(this.val[0]);
             case BIGGEREQUAL:
-                return getAssociatedInt(toCheck.val)>=getAssociatedInt(this.val[0]);
+                return getAssociatedInt(toCheck.val) >= getAssociatedInt(this.val[0]);
             case SMALLEREQUAL:
-                return getAssociatedInt(toCheck.val)<=getAssociatedInt(this.val[0]);
+                return getAssociatedInt(toCheck.val) <= getAssociatedInt(this.val[0]);
             default:
                 return false;
         }
-    }
-
-    public static void setCharacterRanking(Map<Character,Integer> characterRanking) {
-        AreaValueIdentity.characterRanking = characterRanking;
-    }
-    public static int getAssociatedInt(char c) {
-        if(characterRanking == null || !characterRanking.containsKey(c)) return c;
-        else return characterRanking.get(c);
     }
 }

@@ -6,32 +6,60 @@ import HeaderSpecifiers.*;
 
 public class DancingLink {
     MainNode root;
+    List<Options> options;
     Stack<HeaderManager> managers;
     Tree<HeaderNode> solutionTree;
+    Tree<HeaderNode> lastPointer;
     int solutionCount;
     int maxSolutions;
     public DancingLink(List<Constrains> constrains, List<Options> options, int stopAtSolutions) {
         this.root = new MainNode();
         this.managers = new Stack<>();
         this.solutionTree = new Tree<>(null);
+        this.lastPointer = solutionTree;
         this.solutionCount = 0;
         this.maxSolutions = stopAtSolutions;
-        for(Constrains constrain : constrains) {
+        for (Constrains constrain : constrains) {
             constrain.addConstrainsToMatrix(this.root);
         }
-        for(Options option : options) {
+        this.options = options;
+    }
+    public void addConstrain(Constrains constrain) {
+        if(isGenerated()) return;
+        constrain.addConstrainsToMatrix(this.root);
+    }
+    public void addConstrain(List<Constrains> constrains) {
+        if(isGenerated()) return;
+        for(Constrains constrain : constrains) constrain.addConstrainsToMatrix(this.root);
+    }
+    public void gen() {
+        if(isGenerated()) return;
+        for (Options option : options) {
             option.addOptionsToMatrix(this.root);
         }
+    }
+    public boolean isGenerated() {
+        return root != root.getDown();
     }
     public DancingLink(MainNode root, int stopAtSolutions) {
         this.root = root;
         this.managers = new Stack<>();
         this.solutionTree = new Tree<>(null);
+        this.lastPointer = solutionTree;
         this.solutionCount = 0;
         this.maxSolutions = stopAtSolutions;
     }
+    public void selectIdentities(List<Identity> list) {
+        if(!isGenerated()) gen();
+        for(Identity id : list) choseRow(root.getRowHeaderMap().get(id.getName()));
+    }
+    public void selectIdentity(Identity id) {
+        if(!isGenerated()) gen();
+        choseRow(root.getRowHeaderMap().get(id.getName()));
+    }
     public Tree<HeaderNode> solve() {
-        solveRec(this.solutionTree);
+        if(!isGenerated()) gen();
+        solveRec(this.lastPointer);
         return this.solutionTree;
     }
 
@@ -72,6 +100,16 @@ public class DancingLink {
         }
         initialColRemove.attachAll();
         return !solutionPointer.isLeaf();
+    }
+
+    public void choseRow(HeaderNode choosen) {
+        if(choosen == null || choosen!=choosen.getUp().getDown()) return;
+        Tree<HeaderNode> nextTree = new Tree<>(choosen);
+        lastPointer.addChild(nextTree);
+        lastPointer = nextTree;
+        HeaderManager rowSelect = new HeaderManager();
+        rowSelect.detachEntryHeaders(choosen);
+        managers.add(rowSelect);
     }
 
     /*

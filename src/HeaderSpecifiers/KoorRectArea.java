@@ -27,10 +27,18 @@ public class KoorRectArea implements PositionInGrid {
     @Override
     public boolean isInside(KoorPosition toCheck) {
         for(Character key : this.dimensions) {
-            if(toCheck.hasDimension(key)) return false;
-            if( this.koorPosition.get(key).get(0).compareTo(toCheck.koorPosition.get(key)) >=0
-                ||this.koorPosition.get(key).get(1).compareTo(toCheck.koorPosition.get(key)) <=0) return false;
+            if(!toCheck.hasDimension(key)) return false;
+            if( this.koorPosition.get(key).get(0).compareTo(toCheck.koorPosition.get(key)) >0
+                ||this.koorPosition.get(key).get(1).compareTo(toCheck.koorPosition.get(key)) <0) return false;
         }
         return true;
+    }
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for(Character c : dimensions) {
+            result.append(c).append(":").append(koorPosition.get(c).get(0)).append("|")
+            .append(koorPosition.get(c).get(1)).append("|");
+        }
+        return result.toString();
     }
 }

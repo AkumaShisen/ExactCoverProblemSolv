@@ -18,18 +18,25 @@ public class MainNode extends NodeBase {
     public Node lastOptCol;
 
     // typically contains 2 entries, the first being a list that contains all colheaders, the second all rowheaders
-    public List<Map<String, Node>> headerNodeMapList;
+    private List<Map<String, HeaderNode>> headerNodeMapList;
 
 
     public MainNode() {
         super();
-        for(int i=0;i<4;i++) neighbours[i] = this;
+        for (int i = 0; i < 4; i++) neighbours[i] = this;
         headerNodeMapList = new ArrayList<>();
         headerNodeMapList.add(new HashMap<>()); //colheaders, index 0
         headerNodeMapList.add(new HashMap<>()); //rowheaders, index 1
         col = 0;
         row = 0;
         lastOptCol = this;
+    }
+
+    public Map<String,HeaderNode> getColHeaderMap() {
+        return headerNodeMapList.get(0);
+    }
+    public Map<String,HeaderNode> getRowHeaderMap() {
+        return headerNodeMapList.get(1);
     }
 
     public void addHeader(HeaderNode node) throws UnsupportedOperationException {
@@ -90,8 +97,8 @@ public class MainNode extends NodeBase {
     }
 
     public boolean addSparseNode(String rowName, String colName) {
-        HeaderNode colHeader = (HeaderNode) headerNodeMapList.get(0).get(colName);
-        HeaderNode rowHeader = (HeaderNode) headerNodeMapList.get(1).get(rowName);
+        HeaderNode colHeader = getColHeaderMap().get(colName);
+        HeaderNode rowHeader = getRowHeaderMap().get(rowName);
         if(colHeader == null || rowHeader == null) return false;
         new SparseNode(rowHeader, colHeader);
         return true;
@@ -124,7 +131,8 @@ public class MainNode extends NodeBase {
                 if(nextSparseNode != null && colIt.equals(nextSparseNode.getCol())) {
                     result.append("1 ");
                     nextSparseNode = nextSparseNode.get(0) instanceof SparseNode ? (SparseNode) nextSparseNode.get(0) : null;
-                } else result.append("0 ");
+                } //else result.append("0 ");
+                else result.append("  ");
 
                 colIt = colIt.get(0);
             }

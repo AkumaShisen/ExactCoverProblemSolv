@@ -10,6 +10,19 @@ public class KoorPosition implements PositionInGrid {
     Set<Character> dimensions;
 
     public KoorPosition(char[] dimensions , int[] val) {
+        setValues(dimensions,val);
+    }
+    public KoorPosition(char[] dim, int val1, int val2) {
+        int[] val = {val1,val2};
+        setValues(dim,val);
+    }
+
+    public KoorPosition(char dim1, char dim2, int val1, int val2) {
+        char[] dim ={dim1,dim2};
+        int[] val = {val1,val2};
+        setValues(dim,val);
+    }
+    private void setValues(char[] dimensions, int[] val) {
         if(dimensions.length != val.length) throw new IllegalArgumentException("both given arrays must be of same size");
         this.koorPosition = new HashMap<>();
         this.dimensions = new HashSet<>();
@@ -29,6 +42,21 @@ public class KoorPosition implements PositionInGrid {
             if(! this.koorPosition.get(key).equals(toCheck.koorPosition.get(key))) return false;
         }
         return true;
+    }
+    public Integer get(Character c) {
+        return koorPosition.get(c);
+    }
+    public KoorPosition copy() {
+        int len = dimensions.size();
+        char[] dim = new char[len];
+        int[] val = new int[len];
+        int i=0;
+        for(char c : dimensions) {
+            dim[i] = c;
+            val[i] = get(c);
+            i++;
+        }
+        return new KoorPosition(dim,val);
     }
     public String toString() {
         StringBuilder result = new StringBuilder();

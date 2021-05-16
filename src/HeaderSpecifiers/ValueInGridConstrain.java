@@ -5,13 +5,33 @@ import DancingLinkAlg.MainNode;
 import java.security.InvalidParameterException;
 
 public class ValueInGridConstrain implements Constrains{
-    Character val;
+    String[] val;
     char[] dimensions;
     int[] min;
     int[] max;
     int[] gridDim;
 
-    public ValueInGridConstrain(char[] dimensions, int[] min, int[] max, int[] gridDim, Character val) {
+    /**
+     * represents a range of constraints inside a grid for each box with each possible value
+     *
+     * @param dimensions characterarray for each dimension
+     * @param min at which number for a certain dimension to start at
+     * @param max at which number for a certain dimension to stop at
+     * @param gridDim width of the box in a certain dimension
+     * @param val characterarray for values for each of which a separate constraint for each box should be created
+     */
+    public ValueInGridConstrain(char[] dimensions, int[] min, int[] max, int[] gridDim, String[] val) {
+        setValues(dimensions,min,max,gridDim,val);
+    }
+
+    public ValueInGridConstrain(char dim1,char dim2, int min1,int min2, int max1, int max2, int gridDim1, int gridDim2, String[] val) {
+        char[] dim = {dim1,dim2};
+        int[] min = {min1,min2};
+        int[] max = {max1,max2};
+        int[] gridDim = {gridDim1,gridDim2};
+        setValues(dim,min,max,gridDim,val);
+    }
+    private void setValues(char[] dimensions,int[] min, int[] max, int[] gridDim, String[] val) {
         if(dimensions.length != min.length || dimensions.length != max.length)
             throw new InvalidParameterException("all 3 parameter arrays need to be of the same length");
         for(int i=0;i<dimensions.length;i++) {
@@ -26,9 +46,14 @@ public class ValueInGridConstrain implements Constrains{
         this.gridDim = gridDim;
     }
 
+    /**
+     * creates all possible KoorRectArea inside the grid with set widths for all dimensions and
+     * adds for each value a AreaValueIdentity with KoorRectArea, one value and EQUAL comparator as Constrain
+     * @param root MainNode to add those options
+     */
     @Override
     public void addConstrainsToMatrix(MainNode root) {
-        char[] value = {this.val};
+        String[] value = new String[1];
         int[] current = new int[dimensions.length];
         int[] currentMax = new int[dimensions.length];
         for(int i=0;i<dimensions.length;i++) {
@@ -40,7 +65,10 @@ public class ValueInGridConstrain implements Constrains{
         while(true) {
 
             PositionInGrid pos = new KoorRectArea(dimensions,current, currentMax);
-            root.addColumnHeader(new AreaValueIdentity(pos,value, AreaValueIdentity.Comparator.EQUAL));
+            for (String s : val) {
+                value[0] = s;
+                root.addColumnHeader(new AreaValueIdentity(pos, value, AreaValueIdentity.Comparator.EQUAL));
+            }
             int i = 0;
 
             do {
