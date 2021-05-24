@@ -5,8 +5,8 @@ import DancingLinkAlg.Identity;
 
 
 public class PosValueIdentity extends HeaderIdentity {
-    KoorPosition pos;
-    String val;
+    public KoorPosition pos;
+    public String val;
     public PosValueIdentity(KoorPosition pos,String val) {
         super(pos.toString()+" | "+val);
 
@@ -20,6 +20,10 @@ public class PosValueIdentity extends HeaderIdentity {
 
     public boolean match(PosValueIdentity toCheck) {
         return this.pos.isInside(toCheck.pos) && (this.val==null || this.val.equals(toCheck.val));
+    }
+    public String toString() {
+        return name;
+
     }
 
 

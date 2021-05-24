@@ -12,6 +12,7 @@ public class ValueInRangeConstrainOption implements Constrains, Options{
     char[] dimensions;
     int[] min;
     int[] max;
+    boolean mandatory = true;
 
     /**
      * represents a range of Constraints/Options of KoorPosition and val
@@ -37,6 +38,29 @@ public class ValueInRangeConstrainOption implements Constrains, Options{
         int[] max = {max1};
         setValues(dim,min,max,val);
     }
+    public ValueInRangeConstrainOption(char dim1,int pos1, String[] val) {
+        char[] dim = {dim1};
+        int[] min = {pos1};
+        int[] max = {pos1};
+        setValues(dim,min,max,val);
+    }
+
+    public ValueInRangeConstrainOption(char dim1, char dim2,int pos1, int pos2,String[] val) {
+        char[] dim = {dim1,dim2};
+        int[] min = {pos1,pos2};
+        int[] max = {pos1,pos2};
+        setValues(dim,min,max,val);
+    }
+
+    /**
+     * if used as constraint, changes the behaviour of all values in the val array to exactly appear once
+     * to each value to maximally appear once (0 or 1 time)
+     * @return itself
+     */
+    public ValueInRangeConstrainOption setOptional() {
+        this.mandatory = false;
+        return this;
+    }
 
     private void setValues(char[] dimensions, int[] min, int[] max,String[] val) {
         if(dimensions.length != min.length || dimensions.length != max.length)
@@ -50,6 +74,7 @@ public class ValueInRangeConstrainOption implements Constrains, Options{
     }
 
     public List<Identity> getIdentityList() {
+
         List<Identity> list = new LinkedList<>();
         int[] current = new int[dimensions.length];
         System.arraycopy(min, 0, current, 0, dimensions.length);
@@ -88,6 +113,7 @@ public class ValueInRangeConstrainOption implements Constrains, Options{
      */
     @Override
     public void addConstrainsToMatrix(MainNode root) {
-        for(Identity id : getIdentityList()) root.addColumnHeader(id);
+        if(mandatory) for(Identity id : getIdentityList()) root.addColumnHeader(id);
+        else for(Identity id : getIdentityList()) root.addOptColHeader(id);
     }
 }

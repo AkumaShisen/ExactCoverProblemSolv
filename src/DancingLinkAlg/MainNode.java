@@ -1,10 +1,6 @@
 package DancingLinkAlg;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 /* the root of matrix, the upperleft corner of the 2D matrix */
 public class MainNode extends NodeBase {
@@ -29,7 +25,9 @@ public class MainNode extends NodeBase {
         headerNodeMapList.add(new HashMap<>()); //rowheaders, index 1
         col = 0;
         row = 0;
-        lastOptCol = this;
+        HeaderNode filler = new HeaderNode(new HeaderIdentity("filler opt col"),0);
+        addHeader(filler);
+        lastOptCol = filler;
     }
 
     public Map<String,HeaderNode> getColHeaderMap() {
@@ -76,11 +74,21 @@ public class MainNode extends NodeBase {
 
     public void addOptColHeader(Identity name) {
         HeaderNode header = new HeaderNode(name,0);
-        this.lastOptCol.getRight().setLeft(header);
-        header.setRight(this.lastOptCol.getRight());
-        header.setLeft(this.lastOptCol);
-        this.lastOptCol.setRight(header);
-        this.lastOptCol = header;
+
+        if(headerNodeMapList.get(header.rowHeader).containsKey(header.identity.getName())) {
+            throw new UnsupportedOperationException("already contains a "+
+                    (header.rowHeader == 1 ? "row":"col") + " with this identity name in the matrix");
+        }
+
+        header.root = this;
+        headerNodeMapList.get(header.rowHeader).put(header.identity.getName(), header);
+        col += 1;
+
+        this.lastOptCol.getLeft().setRight(header);
+        header.setRight(this.lastOptCol);
+        header.setLeft(this.lastOptCol.getLeft());
+        this.lastOptCol.setLeft(header);
+
     }
 
     public void addRowHeader(Identity name) {
@@ -166,6 +174,7 @@ public class MainNode extends NodeBase {
             }
             it = it.getDown();
         }
+        root.lastOptCol = root.headerNodeMapList.get(0).get(this.lastOptCol.getName());
         return root;
     }
 
@@ -173,5 +182,7 @@ public class MainNode extends NodeBase {
     public String getIdentity() {
         return "MainNode | "+this.row+"/"+this.col;
     }
+
+
 
 }

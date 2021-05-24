@@ -1,8 +1,11 @@
 package HeaderSpecifiers;
 
+import DancingLinkAlg.Identity;
 import DancingLinkAlg.MainNode;
 
 import java.security.InvalidParameterException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ValueInGridConstrain implements Constrains{
     String[] val;
@@ -10,7 +13,7 @@ public class ValueInGridConstrain implements Constrains{
     int[] min;
     int[] max;
     int[] gridDim;
-
+    boolean mandatory = true;
     /**
      * represents a range of constraints inside a grid for each box with each possible value
      *
@@ -45,14 +48,17 @@ public class ValueInGridConstrain implements Constrains{
         this.val = val;
         this.gridDim = gridDim;
     }
-
     /**
-     * creates all possible KoorRectArea inside the grid with set widths for all dimensions and
-     * adds for each value a AreaValueIdentity with KoorRectArea, one value and EQUAL comparator as Constrain
-     * @param root MainNode to add those options
+     * if used as constraint, changes the behaviour of all values in the val array to exactly appear once
+     * to each value to maximally appear once (0 or 1 time)
+     * @return itself
      */
-    @Override
-    public void addConstrainsToMatrix(MainNode root) {
+    public ValueInGridConstrain setOptional() {
+        this.mandatory = false;
+        return this;
+    }
+    public List<Identity> getIdentityList() {
+        List<Identity> resultList = new LinkedList<>();
         String[] value = new String[1];
         int[] current = new int[dimensions.length];
         int[] currentMax = new int[dimensions.length];
@@ -67,7 +73,7 @@ public class ValueInGridConstrain implements Constrains{
             PositionInGrid pos = new KoorRectArea(dimensions,current, currentMax);
             for (String s : val) {
                 value[0] = s;
-                root.addColumnHeader(new AreaValueIdentity(pos, value, AreaValueIdentity.Comparator.EQUAL));
+                resultList.add(new AreaValueIdentity(pos, value, RelationalPositionConstrains.EQUAL));
             }
             int i = 0;
 
@@ -82,6 +88,18 @@ public class ValueInGridConstrain implements Constrains{
                 currentMax[i] += gridDim[i];
             } while(current[i]>max[i]);
         }
+        return resultList;
+    }
+
+    /**
+     * creates all possible KoorRectArea inside the grid with set widths for all dimensions and
+     * adds for each value a AreaValueIdentity with KoorRectArea, one value and EQUAL comparator as Constrain
+     * @param root MainNode to add those options
+     */
+    @Override
+    public void addConstrainsToMatrix(MainNode root) {
+        if(mandatory) for(Identity id : getIdentityList()) root.addColumnHeader(id);
+        else for(Identity id : getIdentityList()) root.addOptColHeader(id);
     }
 }
 

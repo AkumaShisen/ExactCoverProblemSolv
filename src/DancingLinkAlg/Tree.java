@@ -25,20 +25,21 @@ public class Tree<T> {
     }
 
     public String toString() {
-        StringBuilder result= new StringBuilder();
+        StringBuilder result = new StringBuilder();
         TreeIterator<T> it = this.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Iterator<Tree<T>> nextPath = it.nextIt();
-            while(nextPath.hasNext()) {
+            while (nextPath.hasNext()) {
                 Tree<T> nextVal = nextPath.next();
-                if(nextVal.val != null) result.append(nextVal.val.toString());
-                if(nextPath.hasNext()) result.append(" | ");
+                if (nextVal.val != null) result.append(nextVal.val.toString());
+                if (nextPath.hasNext()) result.append(" | ");
             }
 
             result.append("\n");
         }
         return result.toString();
     }
+
     public TreeIterator<T> iterator() {
         return new TreeIterator<>(this);
     }

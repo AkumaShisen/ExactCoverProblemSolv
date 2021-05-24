@@ -6,11 +6,11 @@ import DancingLinkAlg.Identity;
 import java.util.List;
 
 public class ListAreaIdentity extends HeaderIdentity {
-    List<AreaValueIdentity> areaValues;
-    public ListAreaIdentity(List<AreaValueIdentity> list) {
+    List<Identity> areaValues;
+    public ListAreaIdentity(List<Identity> list) {
         super("");
         StringBuilder name= new StringBuilder();
-        for(AreaValueIdentity id : list) name.append(id.name).append(" | ");
+        for(Identity id : list) name.append(id.getName()).append(" | ");
         this.name = name.toString();
         this.areaValues = list;
     }
@@ -21,7 +21,7 @@ public class ListAreaIdentity extends HeaderIdentity {
     }
 
     public boolean match(PosValueIdentity toCheck) {
-        for(AreaValueIdentity e : areaValues) {
+        for(Identity e : areaValues) {
             if(e.match(toCheck)) return true;
         }
         return false;
